@@ -84,6 +84,9 @@ end
 J = (1/m) * total;
 
 
+% regularized cost function
+reg = (lambda / (2 * m)) * (sum(sum(Theta1(:, 2:end) .^ 2)) + sum(sum(Theta2(:, 2:end) .^ 2)));
+J += reg;
 
 
 
