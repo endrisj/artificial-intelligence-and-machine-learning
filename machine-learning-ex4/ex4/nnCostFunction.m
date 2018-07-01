@@ -73,11 +73,19 @@ for i=1:m
   % increase matrix by one element in begining
   x_ = [1 X(i, :)]';
 
-  a2 = [1; sigmoid(Theta1 * x_)];
+  z2 = Theta1 * x_;
+  a2 = [1; sigmoid(z2)];
 
   h = sigmoid(Theta2 * a2);
 
   total += sum(-y_recoded .* log(h) .- (1 .- y_recoded) .* log(1 .- h));
+
+  d3 = h - y_recoded;
+  d2 = Theta2' * d3;
+  d2 = d2(2:end) .* sigmoidGradient(z2);
+
+  Theta1_grad = Theta1_grad + (d2 * x_');
+  Theta2_grad = Theta2_grad + (d3 * a2');
 
 end
 
@@ -89,8 +97,9 @@ reg = (lambda / (2 * m)) * (sum(sum(Theta1(:, 2:end) .^ 2)) + sum(sum(Theta2(:, 
 J += reg;
 
 
-% 
-
+%
+Theta1_grad = Theta1_grad / m;
+Theta2_grad = Theta2_grad / m;
 
 
 
