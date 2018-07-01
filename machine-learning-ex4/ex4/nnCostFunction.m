@@ -62,33 +62,26 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+total = 0;
 
-% recode posible labels to vector
-y_recoded = zeros(10, 1);
-y_recoded(y(1)) = 1;
+for i=1:m
 
-% increase matrix by one element in begining
-length = size(X, 2);
-x_ = ones(length, 1);
-for i=1:length
-  x_(i+1) = X(1, i);
+  % recode posible labels to vector
+  y_recoded = zeros(num_labels, 1);
+  y_recoded(y(i)) = 1;
+
+  % increase matrix by one element in begining
+  x_ = [1 X(i, :)]';
+
+  a2 = [1; sigmoid(Theta1 * x_)];
+
+  h = sigmoid(Theta2 * a2);
+
+  total += sum(-y_recoded .* log(h) .- (1 .- y_recoded) .* log(1 .- h));
+
 end
 
-
-a2 = sigmoid(x_' * Theta1');
-
-length = size(a2, 2);
-a2_ = ones(length, 1);
-for i=1:length
-  a2_(i+1) = a2(i);
-end
-
-a2_
-
-
-z3 = a2_' * Theta2';
-h = sigmoid(z3);
-J = (1/m)*sum(-y.*log(h) .- (1.-y).*log(1.-h))
+J = (1/m) * total;
 
 
 
